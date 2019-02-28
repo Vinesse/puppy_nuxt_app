@@ -1,6 +1,8 @@
-# first-nuxt-app
+# :rainbow: :dog: My first Nuxt app
 
-> My awesome first Nuxt app
+## The two primary focuses of this project are two of Nuxt's main features:
+### Server-side rendering
+### Routing
 
 ## Build Setup
 

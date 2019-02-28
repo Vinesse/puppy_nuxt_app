@@ -1,10 +1,9 @@
 # :rainbow: :dog: Puppy Nuxt App
 
 ## The two primary focuses of this project are two of Nuxt's main features:
-```
-### Server-side rendering
-### Routing
-```
+#### Server-side rendering
+#### Routing
+
 
 ## Build Setup
 

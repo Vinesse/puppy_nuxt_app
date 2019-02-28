@@ -13,7 +13,8 @@ export default {
     asyncData(context) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                //we are faking an async request/faking fetching data from a server
+                //here we are setting a timeout to fake an async request
+                //that would normally be made to the server
                 resolve({
                     puppy: [
                         {

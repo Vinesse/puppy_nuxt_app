@@ -1,4 +1,4 @@
-# :rainbow: :dog: My first Nuxt app
+# :rainbow: :dog: Puppy Nuxt App
 
 ## The two primary focuses of this project are two of Nuxt's main features:
 ### Server-side rendering

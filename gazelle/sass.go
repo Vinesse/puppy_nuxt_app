@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"log"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"

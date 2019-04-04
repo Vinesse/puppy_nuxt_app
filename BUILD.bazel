@@ -1,7 +1,6 @@
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary", "DEFAULT_LANGUAGES")
 
-
 filegroup(
     name = "nuxt-srcs",
     srcs = glob(
@@ -16,7 +15,6 @@ filegroup(
         ],
         # specifically exclude test files
         exclude = [
-
         ],
     ),
 )

@@ -1,4 +1,6 @@
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary", "DEFAULT_LANGUAGES")
+
 
 filegroup(
     name = "nuxt-srcs",
@@ -35,4 +37,27 @@ nodejs_binary(
         "@npm//nuxt/bin:nuxt",
     ] + dependencies + dev_dependencies,
     entry_point = "nuxt/bin/nuxt",
+)
+
+# gazelle:prefix github.com/Vinesse/puppy_nuxt_app
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_js",
+)
+
+gazelle_binary(
+    name = "gazelle_js",
+    # keep
+    languages = DEFAULT_LANGUAGES + [
+        "//gazelle:go_default_library",
+    ],
+    visibility = [
+        # In your project you should define your own Gazelle binary.  Follow
+        # the instructions at
+        # https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.rst to
+        # add the languages you depend on. You can use the gazelle target in
+        # this file as an example if you just need golang, proto and SASS
+        # support.
+        "//visibility:public",
+    ],
 )

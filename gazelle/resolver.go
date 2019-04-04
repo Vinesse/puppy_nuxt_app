@@ -1,4 +1,4 @@
-/* Copyright 2018 The Bazel Authors. All rights reserved.
+/* Copyright 2019 The Bazel Authors. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ func (s *sasslang) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resol
 // the embedding rule will be indexed. The embedding rule will inherit
 // the imports of the embedded rule.
 func (s *sasslang) Embeds(r *rule.Rule, from label.Label) []label.Label {
-	// SASS doesn't have a concept of embedding as far as I know.
+	// Sass doesn't have a concept of embedding as far as I know.
 	return nil
 }
 
@@ -77,12 +77,7 @@ func (s *sasslang) Embeds(r *rule.Rule, from label.Label) []label.Label {
 // dictate how that is stored or represented). Resolve generates a "deps"
 // attribute (or the appropriate language-specific equivalent) for each
 // import according to language-specific rules and heuristics.
-func (s *sasslang) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, from label.Label) {
-	importsRaw := r.PrivateAttr(config.GazelleImportsKey)
-	if importsRaw == nil {
-		// may not be set in tests.
-		return
-	}
+func (s *sasslang) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, importsRaw interface{}, from label.Label) {
 	imports := importsRaw.([]string)
 	r.DelAttr("deps")
 	depSet := make(map[string]bool)

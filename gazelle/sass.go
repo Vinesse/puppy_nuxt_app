@@ -1,4 +1,4 @@
-/* Copyright 2018 The Bazel Authors. All rights reserved.
+/* Copyright 2019 The Bazel Authors. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// gazelle provides a minimal implementation of language.Language for
+// This package provides a minimal implementation of language.Language for
 // rules_sass.
 package gazelle
 
 import (
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
+	"log"
+	"path"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -43,7 +43,7 @@ func NewLanguage() language.Language {
 func (s *sasslang) Kinds() map[string]rule.KindInfo {
 	return map[string]rule.KindInfo{
 		"sass_library": {
-			MatchAny: true,
+			MatchAny: false,
 			NonEmptyAttrs: map[string]bool{
 				"srcs": true,
 			},
@@ -93,66 +93,86 @@ func (s *sasslang) Loads() []rule.LoadInfo {
 //
 // Any non-fatal errors this function encounters should be logged using
 // log.Print.
-func (s *sasslang) GenerateRules(args language.GenerateArgs) (empty, gen []*rule.Rule) {
-	files, err := ioutil.ReadDir(args.Dir)
-	if err != nil {
-		panic(err)
-	}
-
+func (s *sasslang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
 	// base is the last part of the path for this element. For example:
 	// "hello_world" => "hello_world"
 	// "foo/bar" => "bar"
-	base := filepath.Base(args.Rel)
+	base := path.Base(args.Rel)
+	if base == "." {
+		//args.Rel will return an empty string if you're in the root of the repo.
+		//This will then be translated into "." by path.Base which is not a valid
+		//name for a target. Therefore we will use the name of "root" just to have
+		//something that is valid. If the user doesn't want the target to be named
+		// `//:root`, then they can rename it and on the next generation it will
+		// persist the user supplied name.
+		base = "root"
+	}
 
 	rules := []*rule.Rule{}
+	imports := []interface{}{}
 
-	var normalFiles []string
-	for _, file := range files {
-		f := file.Name()
-
-		// Only generate SASS entries for sass files (.scss/.sass)
-		if !strings.HasSuffix(f, ".sass") && !strings.HasSuffix(f, ".scss") {
+	// var normalFiles []string
+	for _, f := range append(args.RegularFiles, args.GenFiles...) {
+		// Only generate Sass entries for sass files (.scss/.sass)
+		if !strings.HasSuffix(f, ".vue") && !strings.HasSuffix(f, ".js") {
 			continue
 		}
 
+		log.Printf("args.Dir: %v", args.Dir)
 		fileInfo := sassFileInfo(args.Dir, f)
+		// if err != nil {
+		// 	panic(fmt.Sprintf("Fatal error"))
+		// }
 
-		// The primary entrypoint on SASS is a main.scss file.
-		if f == "main.scss" {
-			rule := rule.NewRule("sass_binary", base)
-
-			rule.SetAttr("src", "main.scss")
-			rule.SetPrivateAttr(config.GazelleImportsKey, fileInfo.Imports)
-
-			rules = append(rules, rule)
-		} else if strings.HasPrefix(filepath.Base(f), "_") {
-			// Libraries in SASS have filenames that start with _.
-			base = filepath.Base(f)
-
-			rule := rule.NewRule("sass_library", base[1:len(base)-5])
-
-			rule.SetAttr("srcs", []string{base})
-			rule.SetPrivateAttr(config.GazelleImportsKey, fileInfo.Imports)
-
-			// These rules should always be public
-			rule.SetAttr("visibility", []string{"//visibility:public"})
-
-			rules = append(rules, rule)
-		} else {
-			normalFiles = append(normalFiles, f)
+		// for err := range fileInfo.Errors {
+		// 	log.Printf("Error parsing %s: %s\n", fileInfo.Name, err)
+		// }
+		if len(fileInfo.Imports) > 0 {
+			imports = append(imports, fileInfo.Imports)
 		}
+		log.Printf("imports: %v", imports)
+
+		// The primary entrypoint on Sass is a main.scss file.
+		// 	if f == "main.scss" {
+		// 		rule := rule.NewRule("sass_binary", base)
+
+		// 		rule.SetAttr("src", "main.scss")
+		// 		rules = append(rules, rule)
+		// 	} else if strings.HasPrefix(path.Base(f), "_") {
+		// 		// Libraries in Sass have filenames that start with _.
+		// 		// For each file in the dir with a leading "_" create a new sass_library
+		// 		rule := rule.NewRule("sass_library", base[1:len(base)-5])
+
+		// 		rule.SetAttr("srcs", []string{base})
+		// 		rule.SetPrivateAttr(config.GazelleImportsKey, fileInfo.Imports)
+
+		// 		// These rules should always be public
+		// 		rule.SetAttr("visibility", []string{"//visibility:public"})
+
+		// 		rules = append(rules, rule)
+		// 	} else {
+		// 		normalFiles = append(normalFiles, f)
+		// 	}
+		// }
+
+		// if len(normalFiles) > 0 {
+		// 	rule := rule.NewRule("sass_library", base)
+
+		// 	rule.SetAttr("srcs", normalFiles)
+
+		// 	rules = append(rules, rule)
 	}
 
-	if len(normalFiles) > 0 {
-		rule := rule.NewRule("sass_library", base)
-
-		rule.SetAttr("srcs", normalFiles)
-
-		rules = append(rules, rule)
+	return language.GenerateResult{
+		Gen:     rules,
+		Imports: imports,
+		// Empty is a list of rules that cannot be built with the files found in the
+		// directory GenerateRules was asked to process. These will be merged with
+		// existing rules. If ther merged rules are empty, they will be deleted.
+		// In order to keep the BUILD file clean, if no file is included in the
+		// default rule for this directory, then remove it.
+		Empty: []*rule.Rule{rule.NewRule("sass_library", base)},
 	}
-
-	// For each file in the dir with a leading "_" create a new sass_library
-	return nil, rules
 }
 
 // Fix repairs deprecated usage of language-specific rules in f. This is

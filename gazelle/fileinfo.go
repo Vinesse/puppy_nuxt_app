@@ -56,7 +56,7 @@ func sassFileInfo(dir, name string) FileInfo {
 		case match[importSubexpIndex] != nil:
 			log.Printf("match!!!!")
 			imp := match[importSubexpIndex]
-			info.Imports = append(info.Imports, unquoteSASSString(imp))
+			info.Imports = append(info.Imports, string(imp))
 
 		default:
 			// Comment matched. Nothing to extract.

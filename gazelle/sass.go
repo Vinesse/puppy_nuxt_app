@@ -113,6 +113,8 @@ func (s *sasslang) GenerateRules(args language.GenerateArgs) language.GenerateRe
 
 	// var normalFiles []string
 	for _, f := range append(args.RegularFiles, args.GenFiles...) {
+		base = path.Base(f)
+		base = strings.TrimSuffix(base, filepath.Ext(base))
 		// Only generate Sass entries for sass files (.scss/.sass)
 		if !strings.HasSuffix(f, ".vue") && !strings.HasSuffix(f, ".js") {
 			continue
@@ -127,10 +129,16 @@ func (s *sasslang) GenerateRules(args language.GenerateArgs) language.GenerateRe
 		// for err := range fileInfo.Errors {
 		// 	log.Printf("Error parsing %s: %s\n", fileInfo.Name, err)
 		// }
-		if len(fileInfo.Imports) > 0 {
-			imports = append(imports, fileInfo.Imports)
-		}
+		imports = append(imports, fileInfo.Imports)
 		log.Printf("imports: %v", imports)
+
+		if strings.HasSuffix(path.Base(f), ".test.js") {
+			// ignore this for now
+		} else {
+			rule := rule.NewRule("sass_library", base)
+			rule.SetAttr("srcs", f)
+			rules = append(rules, rule)
+		}
 
 		// The primary entrypoint on Sass is a main.scss file.
 		// 	if f == "main.scss" {

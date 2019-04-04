@@ -44,14 +44,17 @@ func sassFileInfo(dir, name string) FileInfo {
 		Name: name,
 	}
 	content, err := ioutil.ReadFile(info.Path)
+	log.Printf("content: %s", content)
 	if err != nil {
 		log.Printf("%s: error reading sass file: %v", info.Path, err)
 		return info
 	}
 
 	for _, match := range sassRe.FindAllSubmatch(content, -1) {
+		log.Printf("match: %v", match)
 		switch {
 		case match[importSubexpIndex] != nil:
+			log.Printf("match!!!!")
 			imp := match[importSubexpIndex]
 			info.Imports = append(info.Imports, unquoteSASSString(imp))
 
@@ -97,12 +100,13 @@ const (
 
 // Based on https://pygments-doc.readthedocs.io/en/latest/_modules/pygments/lexers/web.html#SassLexer
 func buildProtoRegexp() *regexp.Regexp {
-	hexEscape := `\\[xX][0-9a-fA-f]{2}`
-	octEscape := `\\[0-7]{3}`
-	charEscape := `\\[abfnrtv'"\\]`
-	charValue := strings.Join([]string{hexEscape, octEscape, charEscape, "[^\x00\\'\\\"\\\\]"}, "|")
-	strLit := `'(?:` + charValue + `|")*'|"(?:` + charValue + `|')*"`
-	importStmt := `\bimport\s*(?P<import>` + strLit + `)\s*;`
+	// hexEscape := `\\[xX][0-9a-fA-f]{2}`
+	// octEscape := `\\[0-7]{3}`
+	// charEscape := `\\[abfnrtv'"\\]`
+	// charValue := strings.Join([]string{hexEscape, octEscape, charEscape, "[^\x00\\'\\\"\\\\]"}, "|")
+	// strLit := `'(?:` + charValue + `|")*'|"(?:` + charValue + `|')*"`
+	// importStmt := `\bimport\s*(?P<import>` + strLit + `)\s*;`
+	importStmt := `\bimport.+'(?P<import>.+)'.*`
 	sassReSrc := strings.Join([]string{importStmt}, "|")
 	return regexp.MustCompile(sassReSrc)
 }

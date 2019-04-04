@@ -1,5 +1,7 @@
 <template>
     <section class="puppies">
+        <h1>{{ feedingTime() }}</h1>
+        <h2>Test text. Can you see me!!!?</h2>
         <Puppy
             v-for="puppy in puppies"
             :key="puppy.id"
@@ -12,10 +14,16 @@
 
 <script>
 import Puppy from '@/components/Puppy'
+import {format} from 'date-fns'
 
 export default {
     components: {
         Puppy
+    },
+    methods: {
+        feedingTime() {
+        return format(new Date(2014, 0, 24), 'MM/DD/YYYY');
+        },
     },
     asyncData() {
         return new Promise((resolve, reject) => {

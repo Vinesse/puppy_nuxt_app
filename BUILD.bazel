@@ -1,0 +1,38 @@
+load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+
+filegroup(
+    name = "nuxt-srcs",
+    srcs = glob(
+        [
+            "assets/**",
+            "components/**/*.vue",
+            "middleware/*.js",
+            "pages/**/*.vue",
+            "plugins/*.js",
+            "static/*",
+            "store/*.js",
+        ],
+        # specifically exclude test files
+        exclude = [
+
+        ],
+    ),
+)
+
+dependencies = [
+    "@npm//nuxt",
+    "@npm//date-fns",
+]
+
+dev_dependencies = [
+]
+
+nodejs_binary(
+    name = "puppy",  # dev server
+    data = [
+        "nuxt.config.js",
+        ":nuxt-srcs",
+        "@npm//nuxt/bin:nuxt",
+    ] + dependencies + dev_dependencies,
+    entry_point = "nuxt/bin/nuxt",
+)

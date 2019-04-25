@@ -3,4 +3,5 @@ load("@ecosia_bazel_rules_nodejs_contrib//:defs.bzl", "js_library")
 js_library(
     name = "default",
     srcs = ["default.vue"],
+    deps = ["//components:header"],
 )

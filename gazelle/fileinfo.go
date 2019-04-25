@@ -44,7 +44,6 @@ func sassFileInfo(dir, name string) FileInfo {
 		Name: name,
 	}
 	content, err := ioutil.ReadFile(info.Path)
-	log.Printf("content: %s", content)
 	if err != nil {
 		log.Printf("%s: error reading sass file: %v", info.Path, err)
 		return info
@@ -54,9 +53,9 @@ func sassFileInfo(dir, name string) FileInfo {
 		log.Printf("match: %v", match)
 		switch {
 		case match[importSubexpIndex] != nil:
-			log.Printf("match!!!!")
 			imp := match[importSubexpIndex]
-			info.Imports = append(info.Imports, string(imp))
+			log.Printf("matc imp: %s", imp)
+			info.Imports = append(info.Imports, strings.ToLower(string(imp)))
 
 		default:
 			// Comment matched. Nothing to extract.

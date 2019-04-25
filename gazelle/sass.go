@@ -103,7 +103,7 @@ func (s *sasslang) GenerateRules(args language.GenerateArgs) language.GenerateRe
 
 	// var normalFiles []string
 	for _, f := range append(args.RegularFiles, args.GenFiles...) {
-		base = path.Base(f)
+		base = strings.ToLower(path.Base(f))
 		base = strings.TrimSuffix(base, filepath.Ext(base))
 		// Only generate Sass entries for sass files (.scss/.sass)
 		if !strings.HasSuffix(f, ".vue") && !strings.HasSuffix(f, ".js") {

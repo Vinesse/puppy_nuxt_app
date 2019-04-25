@@ -23,8 +23,8 @@ import (
 	"testing"
 )
 
-func TestProtoRegexpGroupNames(t *testing.T) {
-	names := sassRe.SubexpNames()
+func TestJsRegexpGroupNames(t *testing.T) {
+	names := jsRe.SubexpNames()
 	nameMap := map[string]int{
 		"import": importSubexpIndex,
 	}
@@ -38,7 +38,7 @@ func TestProtoRegexpGroupNames(t *testing.T) {
 	}
 }
 
-func TestProtoFileInfo(t *testing.T) {
+func TestJsFileInfo(t *testing.T) {
 	for _, tc := range []struct {
 		desc, name, sass string
 		want             FileInfo

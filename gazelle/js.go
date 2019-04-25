@@ -171,7 +171,7 @@ func (s *jslang) GenerateRules(args language.GenerateArgs) language.GenerateResu
 		// existing rules. If ther merged rules are empty, they will be deleted.
 		// In order to keep the BUILD file clean, if no file is included in the
 		// default rule for this directory, then remove it.
-		Empty: []*rule.Rule{rule.NewRule("sass_library", base)},
+		Empty: []*rule.Rule{rule.NewRule("js_library", base)},
 	}
 }
 

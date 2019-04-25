@@ -33,7 +33,7 @@ type FileInfo struct {
 	Imports []string
 }
 
-var sassRe = buildProtoRegexp()
+var jsRe = buildProtoRegexp()
 
 // jsFileinfo takes a dir and file name and parses the js file into
 // the constituent components, extracting metadata like the set of
@@ -49,12 +49,10 @@ func jsFileinfo(dir, name string) FileInfo {
 		return info
 	}
 
-	for _, match := range sassRe.FindAllSubmatch(content, -1) {
-		log.Printf("match: %v", match)
+	for _, match := range jsRe.FindAllSubmatch(content, -1) {
 		switch {
 		case match[importSubexpIndex] != nil:
 			imp := match[importSubexpIndex]
-			log.Printf("matc imp: %s", imp)
 			info.Imports = append(info.Imports, strings.ToLower(string(imp)))
 
 		default:
@@ -88,7 +86,7 @@ func unquoteSASSString(q []byte) string {
 
 	s, err := strconv.Unquote(string(q))
 	if err != nil {
-		log.Panicf("unquoting string literal %s from sass: %v", q, err)
+		log.Panicf("unquoting string literal %s from js: %v", q, err)
 	}
 	return s
 }
@@ -105,6 +103,6 @@ func buildProtoRegexp() *regexp.Regexp {
 	// strLit := `'(?:` + charValue + `|")*'|"(?:` + charValue + `|')*"`
 	// importStmt := `\bimport\s*(?P<import>` + strLit + `)\s*;`
 	importStmt := `\bimport.+'(?P<import>.+)'.*`
-	sassReSrc := strings.Join([]string{importStmt}, "|")
-	return regexp.MustCompile(sassReSrc)
+	jsReSrc := strings.Join([]string{importStmt}, "|")
+	return regexp.MustCompile(jsReSrc)
 }

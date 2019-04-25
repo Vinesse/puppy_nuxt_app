@@ -88,8 +88,11 @@ func (s *sasslang) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Rem
 		if err == skipImportError {
 			continue
 		} else if err == notFoundError {
-			log.Printf("from.Repo: %v, from.Pkg: %v, l: %v", from.Repo, from.Pkg, l.Rel(from.Repo, from.Pkg).String())
+			// npm dependencies are currently not part of the index and would return this error
+			// TODO: Check that we are actually having an module import here and not just assume it
+			// log.Printf("from.Repo: %v, from.Pkg: %v, l: %v", from.Repo, from.Pkg, l.Rel(from.Repo, from.Pkg).String())
 			log.Printf("Import not found: Imports: %v\n", imp)
+			depSet["@npm//"+imp] = true
 		} else if err != nil {
 			log.Print(err)
 		} else {

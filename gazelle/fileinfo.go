@@ -26,7 +26,7 @@ import (
 	"strings"
 )
 
-// FileInfo contains metadata extracted from a .sass/.scss file.
+// FileInfo contains metadata extracted from a js file.
 type FileInfo struct {
 	Path, Name string
 
@@ -35,17 +35,17 @@ type FileInfo struct {
 
 var sassRe = buildProtoRegexp()
 
-// sassFileInfo takes a dir and file name and parses the .sass file into
+// jsFileinfo takes a dir and file name and parses the js file into
 // the constituent components, extracting metadata like the set of
 // imports that it has.
-func sassFileInfo(dir, name string) FileInfo {
+func jsFileinfo(dir, name string) FileInfo {
 	info := FileInfo{
 		Path: filepath.Join(dir, name),
 		Name: name,
 	}
 	content, err := ioutil.ReadFile(info.Path)
 	if err != nil {
-		log.Printf("%s: error reading sass file: %v", info.Path, err)
+		log.Printf("%s: error reading js file: %v", info.Path, err)
 		return info
 	}
 
@@ -97,7 +97,6 @@ const (
 	importSubexpIndex = 1
 )
 
-// Based on https://pygments-doc.readthedocs.io/en/latest/_modules/pygments/lexers/web.html#SassLexer
 func buildProtoRegexp() *regexp.Regexp {
 	// hexEscape := `\\[xX][0-9a-fA-f]{2}`
 	// octEscape := `\\[0-7]{3}`

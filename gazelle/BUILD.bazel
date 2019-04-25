@@ -6,8 +6,8 @@ go_library(
     srcs = [
         "config.go",
         "fileinfo.go",
+        "js.go",
         "resolver.go",
-        "sass.go",
     ],
     importpath = "github.com/Vinesse/puppy_nuxt_app/gazelle",
     visibility = ["//visibility:public"],

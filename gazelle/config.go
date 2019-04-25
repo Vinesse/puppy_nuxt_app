@@ -26,20 +26,20 @@ import (
 // method is called once with the root configuration when Gazelle
 // starts. RegisterFlags may set an initial values in Config.Exts. When flags
 // are set, they should modify these values.
-func (s *sasslang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
+func (s *jslang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
 }
 
 // CheckFlags validates the configuration after command line flags are parsed.
 // This is called once with the root configuration when Gazelle starts.
 // CheckFlags may set default values in flags or make implied changes.
-func (s *sasslang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
+func (s *jslang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	return nil
 }
 
 // KnownDirectives returns a list of directive keys that this Configurer can
 // interpret. Gazelle prints errors for directives that are not recoginized by
 // any Configurer.
-func (s *sasslang) KnownDirectives() []string {
+func (s *jslang) KnownDirectives() []string {
 	return nil
 }
 
@@ -54,5 +54,5 @@ func (s *sasslang) KnownDirectives() []string {
 //
 // f is the build file for the current directory or nil if there is no
 // existing build file.
-func (s *sasslang) Configure(c *config.Config, rel string, f *rule.File) {
+func (s *jslang) Configure(c *config.Config, rel string, f *rule.File) {
 }

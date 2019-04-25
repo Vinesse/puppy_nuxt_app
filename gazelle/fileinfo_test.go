@@ -89,7 +89,7 @@ import "second";`,
 				t.Fatal(err)
 			}
 
-			got := sassFileInfo(dir, tc.name)
+			got := jsFileinfo(dir, tc.name)
 
 			// Reexpose the fields we care bout for testing.
 			got = FileInfo{

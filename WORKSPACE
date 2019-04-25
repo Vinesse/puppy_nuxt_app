@@ -2,15 +2,16 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "1fbea5f33a8cbf8fd798f4cf7973a9b09e53bda872c75b5665a92a6d28fbbb13",
-    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/0.27.10/rules_nodejs-0.27.10.tar.gz"],
+    urls = ["https://github.com/bazelbuild/rules_nodejs/archive/0.27.12.tar.gz"],
+    strip_prefix = "rules_nodejs-0.27.12",
+    sha256 = "25dbb063a8a1a2b279d55ba158992ad61eb5266c416c77eb82a7d33b4eac533d",
 )
 
 http_archive(
     name = "ecosia_bazel_rules_nodejs_contrib",
-    sha256 = "731285f04b6380059d1c53999253fec0266cfbe2b07158ec6674d4ed9d7dd28f",
-    strip_prefix = "bazel_rules_nodejs_contrib-a60c5f3d4e9563fcfb0e62f29a240dd728718e51",
-    url = "https://github.com/ecosia/bazel_rules_nodejs_contrib/archive/a60c5f3d4e9563fcfb0e62f29a240dd728718e51.tar.gz",
+    sha256 = "cf5d1a4ea99e4a0fcbf674a441581bcb173f71d730bfe68dab32ea194c17f571",
+    strip_prefix = "bazel_rules_nodejs_contrib-bc66e29d998bfb69096212c1e06b78eeac76fc8b",
+    url = "https://github.com/ecosia/bazel_rules_nodejs_contrib/archive/bc66e29d998bfb69096212c1e06b78eeac76fc8b.tar.gz",
 )
 
 http_archive(

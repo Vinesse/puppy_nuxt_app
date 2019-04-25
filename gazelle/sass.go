@@ -127,6 +127,8 @@ func (s *sasslang) GenerateRules(args language.GenerateArgs) language.GenerateRe
 		} else {
 			rule := rule.NewRule("js_library", base)
 			rule.SetAttr("srcs", []string{f})
+			// TODO: Ideally we would not just apply public visibility
+			rule.SetAttr("visibility", []string{"//visibility:public"})
 			rules = append(rules, rule)
 		}
 

@@ -2,40 +2,15 @@ load("@ecosia_bazel_rules_nodejs_contrib//:defs.bzl", "js_library")
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary", "DEFAULT_LANGUAGES")
 
-# filegroup(
-#     name = "nuxt-srcs",
-#     srcs = glob(
-#         [
-#             "assets/**",
-#             "components/**/*.vue",
-#             "middleware/*.js",
-#             "pages/**/*.vue",
-#             "plugins/*.js",
-#             "static/*",
-#             "store/*.js",
-#         ],
-#         # specifically exclude test files
-#         exclude = [
-#         ],
-#     ),
-# )
-
-dependencies = [
-    "@npm//nuxt",
-]
-
-dev_dependencies = [
-]
-
 nodejs_binary(
     name = "puppy",  # dev server
     data = [
-        "nuxt.config.js",
-        "@npm//nuxt/bin:nuxt",
+        ":nuxt.config",
         "//pages/about:index",
         "//pages/puppies:index",
         "//pages/puppies/_id:index",
         "//layouts:default",
+        "@npm//nuxt/bin:nuxt",
     ],
     entry_point = "nuxt/bin/nuxt",
 )

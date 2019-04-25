@@ -1,0 +1,11 @@
+load("@ecosia_bazel_rules_nodejs_contrib//:defs.bzl", "js_library")
+
+js_library(
+    name = "Header",
+    srcs = ["Header.vue"],
+)
+
+js_library(
+    name = "Puppy",
+    srcs = ["Puppy.vue"],
+)

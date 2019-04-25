@@ -9,9 +9,9 @@ http_archive(
 
 http_archive(
     name = "ecosia_bazel_rules_nodejs_contrib",
-    sha256 = "cf5d1a4ea99e4a0fcbf674a441581bcb173f71d730bfe68dab32ea194c17f571",
-    strip_prefix = "bazel_rules_nodejs_contrib-bc66e29d998bfb69096212c1e06b78eeac76fc8b",
-    url = "https://github.com/ecosia/bazel_rules_nodejs_contrib/archive/bc66e29d998bfb69096212c1e06b78eeac76fc8b.tar.gz",
+    sha256 = "2d3e8b145833e820289a51c5516b33ecf938d54f3d4fc18b3449de25efbb6635",
+    strip_prefix = "bazel_rules_nodejs_contrib-bda1e765beda782f59d9e8f3a982d515e1f24634",
+    url = "https://github.com/ecosia/bazel_rules_nodejs_contrib/archive/bda1e765beda782f59d9e8f3a982d515e1f24634.tar.gz",
 )
 
 http_archive(

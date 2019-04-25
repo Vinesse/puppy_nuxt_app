@@ -19,7 +19,6 @@ package gazelle
 
 import (
 	"fmt"
-	"log"
 	"path"
 	"path/filepath"
 	"strings"
@@ -110,7 +109,6 @@ func (s *jslang) GenerateRules(args language.GenerateArgs) language.GenerateResu
 			continue
 		}
 
-		log.Printf("args.Dir: %v", args.Dir)
 		fileInfo := jsFileinfo(args.Dir, f)
 		// if err != nil {
 		// 	panic(fmt.Sprintf("Fatal error"))
@@ -120,7 +118,6 @@ func (s *jslang) GenerateRules(args language.GenerateArgs) language.GenerateResu
 		// 	log.Printf("Error parsing %s: %s\n", fileInfo.Name, err)
 		// }
 		imports = append(imports, fileInfo.Imports)
-		log.Printf("imports: %v", imports)
 
 		if strings.HasSuffix(path.Base(f), ".test.js") {
 			// ignore this for now

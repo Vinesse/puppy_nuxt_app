@@ -83,21 +83,18 @@ func (s *jslang) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.Remot
 	r.DelAttr("deps")
 	depSet := make(map[string]bool)
 	for _, imp := range imports {
-		log.Printf("imp: %v, ix: %v, from %v", imp, ix, from)
 		l, err := resolveWithIndex(ix, imp, from)
 		if err == skipImportError {
 			continue
 		} else if err == notFoundError {
 			// npm dependencies are currently not part of the index and would return this error
 			// TODO: Check that we are actually having an module import here and not just assume it
-			// log.Printf("from.Repo: %v, from.Pkg: %v, l: %v", from.Repo, from.Pkg, l.Rel(from.Repo, from.Pkg).String())
-			log.Printf("Import not found: Imports: %v\n", imp)
+			log.Printf("Import %v not found, assuming npm dependency.\n", imp)
 			depSet["@npm//"+imp] = true
 		} else if err != nil {
 			log.Print(err)
 		} else {
 			l = l.Rel(from.Repo, from.Pkg)
-			log.Printf("from.Repo: %v, from.Pkg: %v, l: %v", from.Repo, from.Pkg, l.Rel(from.Repo, from.Pkg).String())
 			depSet[l.String()] = true
 		}
 	}
@@ -116,9 +113,7 @@ func resolveWithIndex(ix *resolve.RuleIndex, imp string, from label.Label) (labe
 		Lang: "js",
 		Imp:  imp,
 	}
-	log.Printf("my res %v", res)
 	matches := ix.FindRulesByImport(res, "js")
-	log.Printf("matches: %v", matches)
 	if len(matches) == 0 {
 		return label.NoLabel, notFoundError
 	}

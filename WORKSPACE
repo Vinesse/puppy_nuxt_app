@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
     name = "build_bazel_rules_nodejs",
     sha256 = "1fbea5f33a8cbf8fd798f4cf7973a9b09e53bda872c75b5665a92a6d28fbbb13",
@@ -6,10 +7,18 @@ http_archive(
 )
 
 http_archive(
+    name = "ecosia_bazel_rules_nodejs_contrib",
+    sha256 = "731285f04b6380059d1c53999253fec0266cfbe2b07158ec6674d4ed9d7dd28f",
+    strip_prefix = "bazel_rules_nodejs_contrib-a60c5f3d4e9563fcfb0e62f29a240dd728718e51",
+    url = "https://github.com/ecosia/bazel_rules_nodejs_contrib/archive/a60c5f3d4e9563fcfb0e62f29a240dd728718e51.tar.gz",
+)
+
+http_archive(
     name = "io_bazel_rules_go",
     urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.18.1/rules_go-0.18.1.tar.gz"],
     sha256 = "77dfd303492f2634de7a660445ee2d3de2960cbd52f97d8c0dffa9362d3ddef9",
 )
+
 http_archive(
     name = "bazel_gazelle",
     urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.17.0/bazel-gazelle-0.17.0.tar.gz"],

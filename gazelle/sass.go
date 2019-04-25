@@ -43,25 +43,14 @@ func NewLanguage() language.Language {
 // kinds of rules generated for this language may be found here.
 func (s *sasslang) Kinds() map[string]rule.KindInfo {
 	return map[string]rule.KindInfo{
-		"sass_library": {
+		"js_library": {
 			MatchAny: false,
 			NonEmptyAttrs: map[string]bool{
 				"srcs": true,
-			},
-			MergeableAttrs: map[string]bool{
-				"srcs": true,
-			},
-			ResolveAttrs: map[string]bool{"deps": true},
-		},
-		"sass_binary": {
-			MatchAny: true,
-			NonEmptyAttrs: map[string]bool{
 				"deps": true,
-				"srcs": true,
 			},
 			MergeableAttrs: map[string]bool{
 				"srcs": true,
-				"src":  true,
 			},
 			ResolveAttrs: map[string]bool{"deps": true},
 		},
@@ -74,8 +63,8 @@ func (s *sasslang) Kinds() map[string]rule.KindInfo {
 func (s *sasslang) Loads() []rule.LoadInfo {
 	return []rule.LoadInfo{
 		{
-			Name:    "@io_bazel_rules_sass//:defs.bzl",
-			Symbols: []string{"sass_binary", "sass_library"},
+			Name:    "@ecosia_bazel_rules_nodejs_contrib//:defs.bzl",
+			Symbols: []string{"js_library"},
 		},
 	}
 }
@@ -136,8 +125,8 @@ func (s *sasslang) GenerateRules(args language.GenerateArgs) language.GenerateRe
 		if strings.HasSuffix(path.Base(f), ".test.js") {
 			// ignore this for now
 		} else {
-			rule := rule.NewRule("sass_library", base)
-			rule.SetAttr("srcs", f)
+			rule := rule.NewRule("js_library", base)
+			rule.SetAttr("srcs", []string{f})
 			rules = append(rules, rule)
 		}
 

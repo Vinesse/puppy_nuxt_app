@@ -1,3 +1,4 @@
+load("@ecosia_bazel_rules_nodejs_contrib//:defs.bzl", "js_library")
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary", "DEFAULT_LANGUAGES")
 
@@ -58,4 +59,14 @@ gazelle_binary(
         # support.
         "//visibility:public",
     ],
+)
+
+js_library(
+    name = ".eslintrc",
+    srcs = [".eslintrc.js"],
+)
+
+js_library(
+    name = "nuxt.config",
+    srcs = ["nuxt.config.js"],
 )

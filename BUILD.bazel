@@ -1,41 +1,17 @@
+load("@ecosia_bazel_rules_nodejs_contrib//:defs.bzl", "js_library")
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary", "DEFAULT_LANGUAGES")
-
-
-filegroup(
-    name = "nuxt-srcs",
-    srcs = glob(
-        [
-            "assets/**",
-            "components/**/*.vue",
-            "middleware/*.js",
-            "pages/**/*.vue",
-            "plugins/*.js",
-            "static/*",
-            "store/*.js",
-        ],
-        # specifically exclude test files
-        exclude = [
-
-        ],
-    ),
-)
-
-dependencies = [
-    "@npm//nuxt",
-    "@npm//date-fns",
-]
-
-dev_dependencies = [
-]
 
 nodejs_binary(
     name = "puppy",  # dev server
     data = [
-        "nuxt.config.js",
-        ":nuxt-srcs",
+        ":nuxt.config",
+        "//pages/about:index",
+        "//pages/puppies:index",
+        "//pages/puppies/_id:index",
+        "//layouts:default",
         "@npm//nuxt/bin:nuxt",
-    ] + dependencies + dev_dependencies,
+    ],
     entry_point = "nuxt/bin/nuxt",
 )
 
@@ -49,15 +25,27 @@ gazelle_binary(
     name = "gazelle_js",
     # keep
     languages = DEFAULT_LANGUAGES + [
-        "//gazelle:go_default_library",
+        "@ecosia_bazel_rules_nodejs_contrib//gazelle:go_default_library",
     ],
     visibility = [
-        # In your project you should define your own Gazelle binary.  Follow
-        # the instructions at
-        # https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.rst to
-        # add the languages you depend on. You can use the gazelle target in
-        # this file as an example if you just need golang, proto and SASS
-        # support.
         "//visibility:public",
     ],
+)
+
+js_library(
+    name = ".eslintrc",
+    srcs = [".eslintrc.js"],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "nuxt.config",
+    srcs = ["nuxt.config.js"],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "jest.config",
+    srcs = ["jest.config.js"],
+    visibility = ["//visibility:public"],
 )

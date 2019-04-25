@@ -1,0 +1,19 @@
+load("@ecosia_bazel_rules_nodejs_contrib//:defs.bzl", "jest_node_test", "js_library")
+
+js_library(
+    name = "index",
+    srcs = ["index.vue"],
+    visibility = ["//visibility:public"],
+)
+
+jest_node_test(
+    name = "index.test",
+    srcs = ["index.test.js"],
+    config = "//:jest.config",
+    entry_point = "jest-cli/bin/jest.js",
+    jest = "@npm//jest/bin:jest",
+    deps = [
+        ":index",
+        "@npm//@vue/test-utils",
+    ],
+)
